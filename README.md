@@ -11,13 +11,15 @@ Country list App designed with simple MVC pattern, the app performs the followin
 
 Since the 'flag' key in JSON is SVG file, couldn't use caching to download flag image and cache.
 
-Controller: 
+Controllers: 
 
 RBTMasterViewController:
 Displays List of countries, search bar and indexing. 
 
 RBTDetailViewController:
 Displays a static table with image of flag and few data points about the selected country.
+
+Models: 
 
 RBTCountry:
 Model containing properties of country. Helps to enumerate the data points and return nil incase of empty values in JSON for required properties.
