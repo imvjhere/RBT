@@ -1,11 +1,3 @@
-//
-//  RBTFetchDataAPI.m
-//  CountryList
-//
-//  Created by VijayG on 2017-06-22.
-//  Copyright © 2017 Org. All rights reserved.
-//
-
 #import "RBTFetchDataAPI.h"
 #import "RBTCountry.h"
 
@@ -74,17 +66,15 @@ NSString *const RBTFetchDataErrorDomain = @"RBTFetchDataErrorDomain";
     {
         NSLog(@"%@",countries);
 
-            for (NSDictionary *countryDictionary in countries)
+        for (NSDictionary *countryDictionary in countries)
+        {
+            RBTCountry *country = [[RBTCountry alloc] init];
+            if ([country didUpdateSucceedForCountryDictionary:countryDictionary])
             {
-                RBTCountry *country = [[RBTCountry alloc] init];
-                if ([country didUpdateSucceedForCountryDictionary:countryDictionary])
-                {
-                    [countriesArray addObject:country];
-                }
+                [countriesArray addObject:country];
             }
+        }
         
-        // Sort array alphabetically - Helps with indexing
-        [countriesArray sortUsingDescriptors: [NSArray arrayWithObjects: [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES], nil]];
         self.fetchedCountries = [countriesArray copy];
         completion(YES, nil);
     }

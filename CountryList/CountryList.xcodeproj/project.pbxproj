@@ -259,6 +259,7 @@
 		BD1109C41EFDDFCA006FF96F /* za.png in Resources */ = {isa = PBXBuildFile; fileRef = BD1108CA1EFDDFC9006FF96F /* za.png */; };
 		BD1109C51EFDDFCA006FF96F /* zm.png in Resources */ = {isa = PBXBuildFile; fileRef = BD1108CB1EFDDFC9006FF96F /* zm.png */; };
 		BD1109C61EFDDFCA006FF96F /* zw.png in Resources */ = {isa = PBXBuildFile; fileRef = BD1108CC1EFDDFC9006FF96F /* zw.png */; };
+		BD1C86DC1F027327003305D1 /* RBTCountriesSection.m in Sources */ = {isa = PBXBuildFile; fileRef = BD1C86DB1F027327003305D1 /* RBTCountriesSection.m */; };
 		BD54F7AA1EFBC17300699104 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BD54F7A91EFBC17300699104 /* main.m */; };
 		BD54F7AD1EFBC17300699104 /* RBTAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = BD54F7AC1EFBC17300699104 /* RBTAppDelegate.m */; };
 		BD54F7B01EFBC17300699104 /* RBTMasterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BD54F7AF1EFBC17300699104 /* RBTMasterViewController.m */; };
@@ -543,6 +544,8 @@
 		BD1108CA1EFDDFC9006FF96F /* za.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = za.png; path = CountryList/Flags/za.png; sourceTree = "<group>"; };
 		BD1108CB1EFDDFC9006FF96F /* zm.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = zm.png; path = CountryList/Flags/zm.png; sourceTree = "<group>"; };
 		BD1108CC1EFDDFC9006FF96F /* zw.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = zw.png; path = CountryList/Flags/zw.png; sourceTree = "<group>"; };
+		BD1C86DA1F027327003305D1 /* RBTCountriesSection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RBTCountriesSection.h; sourceTree = "<group>"; };
+		BD1C86DB1F027327003305D1 /* RBTCountriesSection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RBTCountriesSection.m; sourceTree = "<group>"; };
 		BD54F7A51EFBC17300699104 /* CountryList.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CountryList.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		BD54F7A91EFBC17300699104 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		BD54F7AB1EFBC17300699104 /* RBTAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RBTAppDelegate.h; sourceTree = "<group>"; };
@@ -857,6 +860,8 @@
 				BD54F7DC1EFC4A8B00699104 /* RBTFetchDataAPI.m */,
 				BD54F7DE1EFC4ABE00699104 /* RBTCountry.h */,
 				BD54F7DF1EFC4ABE00699104 /* RBTCountry.m */,
+				BD1C86DA1F027327003305D1 /* RBTCountriesSection.h */,
+				BD1C86DB1F027327003305D1 /* RBTCountriesSection.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -1339,6 +1344,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				BD54F7E31EFC4B6600699104 /* RBTDetailViewController.m in Sources */,
+				BD1C86DC1F027327003305D1 /* RBTCountriesSection.m in Sources */,
 				BD54F7E01EFC4ABE00699104 /* RBTCountry.m in Sources */,
 				BD54F7B01EFBC17300699104 /* RBTMasterViewController.m in Sources */,
 				BD54F7AD1EFBC17300699104 /* RBTAppDelegate.m in Sources */,
