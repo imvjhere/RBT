@@ -68,8 +68,8 @@ NSString *const RBTFetchDataErrorDomain = @"RBTFetchDataErrorDomain";
 
         for (NSDictionary *countryDictionary in countries)
         {
-            RBTCountry *country = [[RBTCountry alloc] init];
-            if ([country didUpdateSucceedForCountryDictionary:countryDictionary])
+            RBTCountry *country = [[RBTCountry alloc] initWithDictionary:countryDictionary];
+            if (country)
             {
                 [countriesArray addObject:country];
             }

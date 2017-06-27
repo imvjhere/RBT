@@ -2,15 +2,15 @@
 
 @interface RBTCountry : NSObject
 
-// The country properties
-@property (strong, nonatomic) NSString *name;
-@property (strong, nonatomic) NSString *alphaCode;
-@property (strong, nonatomic) NSString *nativeName;
-@property (strong, nonatomic) NSString *capital;
-@property (strong, nonatomic) NSString *region;
-@property (strong, nonatomic) NSString *subregion;
-@property (strong, nonatomic) NSURL *flag;
+- (instancetype)initWithDictionary:(NSDictionary *)dictionary;
+@property (nonatomic, readonly) NSDictionary *dictionaryRepresentation;
 
--(BOOL)didUpdateSucceedForCountryDictionary:(NSDictionary *)countryDictionary;
+@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly) NSString *alphaCode;
+@property (nonatomic, readonly) NSString *nativeName;
+@property (nonatomic, readonly) NSString *capital;
+@property (nonatomic, readonly) NSString *region;
+@property (nonatomic, readonly) NSString *subregion;
 
 @end
+

@@ -95,6 +95,8 @@
         RBTCountry *country = [self countryForIndexPath:indexPath];
         RBTDetailViewController *controller = (RBTDetailViewController *)segue.destinationViewController;
         controller.country = country;
+        
+        controller.title = country.name;
     }
 }
 
@@ -164,7 +166,19 @@
     
     RBTCountry *country = [self countryForIndexPath:indexPath];
     
-    cell.flageImageView.image = [UIImage imageNamed:country.alphaCode] ? [UIImage imageNamed:country.alphaCode] : [UIImage imageNamed:@"countries.png"];
+    UIImage *image = [UIImage imageNamed:country.alphaCode];
+    if (image)
+    {
+        cell.flageImageView.image = image;
+        cell.flageImageView.layer.borderWidth = 0.5;
+        cell.flageImageView.layer.borderColor = [UIColor lightGrayColor].CGColor;
+    }
+    else
+    {
+        cell.flageImageView.image = [UIImage imageNamed:@"countries.png"];
+        cell.flageImageView.layer.borderColor = NULL;
+    }
+        
     cell.countryLabel.text = country.name;
     
     return cell;
