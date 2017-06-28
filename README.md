@@ -8,6 +8,8 @@ Country list App designed with simple MVC pattern, the app performs the followin
 * Displays the country list in tableView
 * Search bar acts as filter stored countries based on search query
 * Alphabet index allows user to jump to needed country.
+* Added Grouping based on Alphabets
+* Added cache for JSON data
 
 Since the 'flag' key in JSON is SVG file, couldn't use caching to download flag image and cache.
 
