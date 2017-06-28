@@ -3,89 +3,89 @@
 
 NSString *const RBTFetchDataErrorDomain = @"RBTFetchDataErrorDomain";
 
-@interface RBTFetchDataAPI ()
-@property (strong, nonatomic) NSArray *fetchedCountries;
-@end
-
 @implementation RBTFetchDataAPI
 
-- (NSURL *)serverUrl
+- (void)fetchCountriesWithCompletion:(RBTDataCompletion)completion
 {
-    NSString *urlString = @"https://restcountries.eu/rest/v2/all";
-    NSURL *dataUrl = [NSURL URLWithString:urlString];
-    return dataUrl;
-}
-
-- (void)fetchCountryJson:(RBTDataCompletion)completion
-{
+    NSData *cachedData = [[self class] cachedJSONData];
+    if (cachedData)
+    {
+        [self parseJSONData:cachedData completion:completion];
+    }
+    
     __weak typeof(self) weakSelf = self;
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[self serverUrl]
+    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithURL:[[self class] serverURL]
                                                              completionHandler:^(NSData *data,
                                                                                  NSURLResponse *response,
                                                                                  NSError *error)
                                   {
-                                      NSLog(@"URL response: %@",response);
-                                      NSLog(@"response data: %@",data);
-                                      NSDictionary *errorInfo = nil;
-                                      if (!error) {
-                                          // Success
-                                          if ([response isKindOfClass:[NSHTTPURLResponse class]]) {
-                                              dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                                  [weakSelf parseJsonResponse:data completion:completion];
-                                              });
-                                              
-                                          }  else {
-                                              // Server error
-                                              NSLog(@"error : %@", error.description);
-                                              errorInfo = error ? @{NSUnderlyingErrorKey: error} : nil;
-                                              completion(NO, [NSError errorWithDomain:RBTFetchDataErrorDomain
-                                                                                 code:RBTFetchDataErrorCodeServerError
-                                                                             userInfo:errorInfo]);
-                                          }
+                                      if (data) {
+                                          dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                                              if (![data isEqual:cachedData])
+                                              {
+                                                  [weakSelf parseJSONData:data completion:completion];
+                                                  [[weakSelf class] cacheJSONData:data];
+                                              }
+                                          });
                                       } else {
-                                          // Response failed
-                                          NSLog(@"error : %@", error.description);
-                                          errorInfo = error ? @{NSUnderlyingErrorKey: error} : nil;
-                                          completion(NO, [NSError errorWithDomain:RBTFetchDataErrorDomain
-                                                                             code:RBTFetchDataErrorCodeNetworkError
-                                                                         userInfo:errorInfo]);
+                                          NSDictionary *userInfo = error ? @{NSUnderlyingErrorKey: error} : nil;
+                                          completion(nil, [NSError errorWithDomain:RBTFetchDataErrorDomain
+                                                                              code:RBTFetchDataErrorCodeServerError
+                                                                          userInfo:userInfo]);
                                       }
                                   }];
     [task resume];
 }
 
--(void)parseJsonResponse:(NSData*)data completion:(RBTDataCompletion)completion
+-(void)parseJSONData:(NSData*)data completion:(RBTDataCompletion)completion
 {
     NSError *error;
-    NSArray<NSDictionary *> *countries = [NSJSONSerialization JSONObjectWithData:data
-                                                                            options:0
-                                                                              error:&error];
-    NSMutableArray *countriesArray = [NSMutableArray array];
-    
-    if (!error)
+    NSArray<NSDictionary *> *countryDictionaries = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (countryDictionaries)
     {
-        NSLog(@"%@",countries);
-
-        for (NSDictionary *countryDictionary in countries)
+        NSMutableArray *countries = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *countryDictionary in countryDictionaries)
         {
             RBTCountry *country = [[RBTCountry alloc] initWithDictionary:countryDictionary];
             if (country)
             {
-                [countriesArray addObject:country];
+                [countries addObject:country];
             }
         }
         
-        self.fetchedCountries = [countriesArray copy];
-        completion(YES, nil);
+        completion([NSArray arrayWithArray:countries], nil);
     }
     else
     {
-        // Error Parsing JSON
-        NSDictionary *errorInfo = error ? @{NSUnderlyingErrorKey: error} : nil;
-        completion(NO, [NSError errorWithDomain:RBTFetchDataErrorDomain
-                                           code:RBTFetchDataErrorCodeJSONDataError
-                                       userInfo:errorInfo]);
+        NSDictionary *userInfo = error ? @{NSUnderlyingErrorKey: error} : nil;
+        completion(nil, [NSError errorWithDomain:RBTFetchDataErrorDomain
+                                            code:RBTFetchDataErrorCodeJSONDataError
+                                        userInfo:userInfo]);
     }
+}
+
++ (NSData *)cachedJSONData
+{
+    return [NSData dataWithContentsOfURL:[self cachedDataURL]];
+}
+
++ (void)cacheJSONData:(NSData *)data
+{
+    [data writeToURL:[self cachedDataURL] atomically:YES];
+}
+
+#pragma mark -
+
++ (NSURL *)serverURL
+{
+    return [NSURL URLWithString:@"https://restcountries.eu/rest/v2/all"];
+}
+
++ (NSURL *)cachedDataURL
+{
+    NSURL *baseURL = [[NSFileManager defaultManager] URLsForDirectory:NSCachesDirectory inDomains:NSUserDomainMask].firstObject;
+    return [baseURL URLByAppendingPathComponent:@"Countries.json"];
 }
 
 @end

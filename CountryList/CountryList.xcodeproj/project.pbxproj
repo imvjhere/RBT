@@ -871,8 +871,6 @@
 			children = (
 				BD1107CF1EFD0F18006FF96F /* RBTCountryTableViewCell.h */,
 				BD1107D01EFD0F18006FF96F /* RBTCountryTableViewCell.m */,
-				BD54F7B11EFBC17300699104 /* Main.storyboard */,
-				BD54F7B61EFBC17300699104 /* LaunchScreen.storyboard */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -920,6 +918,8 @@
 		BD54F7A71EFBC17300699104 /* CountryList */ = {
 			isa = PBXGroup;
 			children = (
+				BD54F7B11EFBC17300699104 /* Main.storyboard */,
+				BD54F7B61EFBC17300699104 /* LaunchScreen.storyboard */,
 				BD2023051F00199D00FD00AF /* Misc */,
 				BD2023041F00199200FD00AF /* Controllers */,
 				BD2023031F00198900FD00AF /* Views */,

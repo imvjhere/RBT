@@ -39,36 +39,10 @@
     self.tableView.rowHeight = UITableViewAutomaticDimension;
         
     __weak typeof(self) weakSelf = self;
-    [self.fetchDataAPI fetchCountryJson:^(BOOL success, NSError *error){
-        if (success) {
+    [self.fetchDataAPI fetchCountriesWithCompletion:^(NSArray<RBTCountry *> *countries, NSError *error) {
+        if (countries) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-                NSArray<RBTCountry *> *countries = [weakSelf.fetchDataAPI.fetchedCountries sortedArrayUsingDescriptors:@[ sortDescriptor ]];
-                
-                NSMutableArray<RBTCountriesSection *> *sections = [[NSMutableArray alloc] init];
-                RBTCountriesSection *currentSection;
-                NSMutableArray<RBTCountry *> *currentCountries = [[NSMutableArray alloc] init];
-                for (RBTCountry *country in countries)
-                {
-                    NSString *firstLetter = [country.name substringToIndex:1];
-                    if (![currentSection.title isEqualToString:firstLetter])
-                    {
-                        if (currentSection)
-                        {
-                            currentSection.countries = [NSArray arrayWithArray:currentCountries];
-                            [currentCountries removeAllObjects];
-                            
-                            [sections addObject:currentSection];
-                        }
-                        
-                        currentSection = [[RBTCountriesSection alloc] init];
-                        currentSection.title = firstLetter;
-                    }
-                    
-                    [currentCountries addObject:country];
-                }
-                
-                self.sections = [NSArray arrayWithArray:sections];
+                [weakSelf loadSectionsForCountries:countries];
                 
                 if (weakSelf.searchController.isActive)
                 {
@@ -85,11 +59,45 @@
     }];
 }
 
+- (void)loadSectionsForCountries:(NSArray<RBTCountry *> *)countries
+{
+    NSSortDescriptor *sortDescriptor = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
+    NSArray<RBTCountry *> *sortedCountries = [countries sortedArrayUsingDescriptors:@[ sortDescriptor ]];
+    
+    NSMutableArray<RBTCountriesSection *> *sections = [[NSMutableArray alloc] init];
+    RBTCountriesSection *currentSection;
+    NSMutableArray<RBTCountry *> *currentCountries = [[NSMutableArray alloc] init];
+    for (RBTCountry *country in sortedCountries)
+    {
+        NSString *firstLetter = [country.name substringToIndex:1];
+        if (![currentSection.title isEqualToString:firstLetter])
+        {
+            if (currentSection)
+            {
+                currentSection.countries = [NSArray arrayWithArray:currentCountries];
+                [currentCountries removeAllObjects];
+                
+                [sections addObject:currentSection];
+            }
+            
+            currentSection = [[RBTCountriesSection alloc] init];
+            currentSection.title = firstLetter;
+        }
+        
+        [currentCountries addObject:country];
+    }
+    
+    self.sections = [NSArray arrayWithArray:sections];
+}
+
 #pragma mark - Segues
 
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
 {
     if ([segue.identifier isEqualToString:@"showDetail"]) {
+        // Remove back button title
+        self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:nil action:nil];
+        
         NSIndexPath *indexPath = self.tableView.indexPathForSelectedRow;
         
         RBTCountry *country = [self countryForIndexPath:indexPath];

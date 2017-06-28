@@ -1,19 +1,18 @@
 #import <Foundation/Foundation.h>
 
+@class RBTCountry;
+
 extern NSString *const RBTFetchDataErrorDomain;
 
 typedef NS_OPTIONS(NSUInteger, RBTFetchDataErrorCode) {
     RBTFetchDataErrorCodeServerError,
     RBTFetchDataErrorCodeJSONDataError,
-    RBTFetchDataErrorCodeNetworkError,
     RBTFetchDataErrorCodeUnknownError
 };
 
 @interface RBTFetchDataAPI : NSObject
 
-@property (nonatomic, readonly) NSArray *fetchedCountries;
-
-typedef void (^RBTDataCompletion)(BOOL success, NSError* error);
-- (void)fetchCountryJson:(RBTDataCompletion)completion;
+typedef void (^RBTDataCompletion)(NSArray<RBTCountry *> *countries, NSError* error);
+- (void)fetchCountriesWithCompletion:(RBTDataCompletion)completion;
 
 @end

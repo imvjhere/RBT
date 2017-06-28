@@ -47,4 +47,9 @@
     return self.dictionaryRepresentation[@"subregion"];
 }
 
+- (NSString *)description
+{
+    return [NSString stringWithFormat:@"%@ %@", super.description, self.dictionaryRepresentation];
+}
+
 @end
